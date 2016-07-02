@@ -7,6 +7,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -32,6 +34,7 @@ public class WordCount
 	  {
       word.set(itr.nextToken()); // write that token to word
      context.write(word, one);
+     
    }
 	}
 }
@@ -62,13 +65,13 @@ public static void main(String[] args) throws Exception  // main method in drive
  
  job.setMapperClass(TokenizerMapper.class); // tells u mapper class 
  //job.setCombinerClass(IntSumReducer.class); 
-	//job.setInpuFormatClass(TextInputFormat.class);
-	//job.setOutputFormatClass(TextOutputFormat.class);
+//job.setInputFormatClass(TextInputFormat.class);
+//job.setOutputFormatClass(TextOutputFormat.class);
  job.setReducerClass(IntSumReducer.class); // tells reducer class	
  job.setOutputKeyClass(Text.class);      
- job.setOutputValueClass(IntWritable.class);
- 
-	FileInputFormat.addInputPath(job, new Path(args[0])); //FileInputFormat is base class for all input classes and addInputPath is Input Hdfs path. path(args[0]) -> first arg of input hdfs path
+ job.setOutputValueClass(IntWritable.class);//output value 
+  
+FileInputFormat.addInputPath(job, new Path(args[0])); //FileInputFormat is base class for all input classes and addInputPath is Input Hdfs path. path(args[0]) -> first arg of input hdfs path
  FileOutputFormat.setOutputPath(job, new Path(args[1])); //FileOutputFormat is base class for all output classes and setOutputPath stores the output path of hdfs. 
 
  System.exit(job.waitForCompletion(true) ? 0 : 1); //holds untill program complete its execution
